@@ -1,7 +1,6 @@
 import { eq } from "drizzle-orm";
-import { usersSync } from "drizzle-orm/neon";
 import db from "@/db/index";
-import { articles } from "@/db/schema";
+import { articles, usersSync } from "@/db/schema";
 
 export async function getArticles() {
   const response = await db
