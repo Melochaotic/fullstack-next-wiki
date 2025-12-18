@@ -18,6 +18,7 @@ vi.mock("@/stack/server");
 vi.mock("@/db/authz");
 vi.mock("@/cache");
 vi.mock("@/ai/summarize");
+vi.mock("@/db/sync-user");
 
 describe("Article Actions", () => {
   const mockUser = {
