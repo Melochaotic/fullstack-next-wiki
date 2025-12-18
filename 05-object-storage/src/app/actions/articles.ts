@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { authorizeUserToEditArticle } from "@/db/authz";
 import db from "@/db/index";
 import { articles } from "@/db/schema";
+import { ensureUserExists } from "@/db/sync-user";
 import { stackServerApp } from "@/stack/server";
 
 // Server actions for articles (stubs)
@@ -28,6 +29,9 @@ export async function createArticle(data: CreateArticleInput) {
   if (!user) {
     throw new Error("❌ Unauthorized");
   }
+
+  await ensureUserExists(user);
+
   console.log("✨ createArticle called:", data);
 
   const response = await db
