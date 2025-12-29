@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { stackServerApp } from "@/stack/server";
+import { authorizeUserToEditArticle } from "@/db/authZ";
 import { eq } from "drizzle-orm";
 import db from "@/db";
 import { articles } from "@/db/schema";
@@ -47,6 +48,10 @@ export async function updateArticle(id: string, data: UpdateArticleInput) {
         throw new Error("❌ Unauthorized");
     }
 
+    if (!(await authorizeUserToEditArticle(user.id, +id))) {
+        throw new Error("❌ Unauthorized");
+    }
+
     console.log("📝 updateArticle called:", { id, ...data });
 
     await db
@@ -63,6 +68,10 @@ export async function updateArticle(id: string, data: UpdateArticleInput) {
 export async function deleteArticle(id: string) {
     const user = await stackServerApp.getUser();
     if (!user) {
+        throw new Error("❌ Unauthorized");
+    }
+
+    if (!(await authorizeUserToEditArticle(user.id, +id))) {
         throw new Error("❌ Unauthorized");
     }
 
